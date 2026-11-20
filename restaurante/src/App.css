@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap");
+
+:root {
+  --carbon: #1c2329;
+  --acero: #2b343b;
+  --fondo: #e8ecee;
+  --papel: #fdfdfb;
+  --linea: #cfd6da;
+  --ambar: #f2b705;
+  --listo: #1f7a4d;
+  --tarde: #c23a2b;
+  --texto: #1c2329;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; min-height: 100%; }
+body { font-family: "Barlow", system-ui, sans-serif; color: var(--texto); }
+button, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, textarea:focus-visible { outline: 3px solid var(--ambar); outline-offset: 2px; }
+h2, h3 { font-family: "Barlow Condensed", sans-serif; margin: 0; letter-spacing: 0.02em; }
+
+.app { min-height: 100vh; background: var(--fondo); }
+
+/* Barra superior */
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--carbon); color: #fff; position: sticky; top: 0; z-index: 5; }
+.nav strong { font-family: "Barlow Condensed", sans-serif; font-size: 1.4rem; }
+
+/* Mesero */
+.mesero { max-width: 640px; margin: 0 auto; padding: 16px 16px 110px; display: grid; gap: 22px; }
+.mesero h2 { font-size: 1.3rem; margin-bottom: 10px; }
+.mesas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mesas button, .cats button { min-height: 52px; border: 1.5px solid var(--linea); background: var(--papel); border-radius: 10px; font-size: 1.15rem; font-weight: 600; }
+.cats { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; }
+.cats button { padding: 0 16px; font-size: 1rem; white-space: nowrap; }
+.mesas button.sel, .cats button.sel { background: var(--carbon); border-color: var(--carbon); color: #fff; }
+
+.platillos, .resumen { list-style: none; margin: 0; padding: 0; background: var(--papel); border-radius: 12px; border: 1.5px solid var(--linea); }
+.platillos li { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; padding: 10px 12px; }
+.platillos li + li, .resumen li + li { border-top: 1px solid var(--linea); }
+.nombre { font-weight: 500; }
+.precio { color: #5d6a73; }
+.stepper { display: flex; align-items: center; gap: 4px; }
+.stepper span { min-width: 28px; text-align: center; font-weight: 600; font-size: 1.1rem; }
+.stepper button { width: 44px; height: 44px; border-radius: 10px; border: 1.5px solid var(--carbon); background: var(--papel); font-size: 1.4rem; line-height: 1; }
+.stepper button:last-child { background: var(--carbon); color: #fff; }
+.stepper button:disabled { opacity: 0.3; cursor: default; }
+
+.resumen li { display: flex; justify-content: space-between; padding: 10px 12px; }
+.vacio { color: #5d6a73; margin: 0 0 8px; }
+.mesero textarea { width: 100%; margin-top: 10px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--linea); background: var(--papel); resize: vertical; }
+
+.barra { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); background: var(--carbon); color: #fff; }
+.barra div { display: grid; }
+.barra small { color: #aab4bb; }
+.barra strong { font-family: "Barlow Condensed", sans-serif; font-size: 1.8rem; line-height: 1; }
+.enviar { flex: 1; max-width: 280px; min-height: 52px; border: 0; border-radius: 12px; background: var(--ambar); color: var(--carbon); font-size: 1.1rem; font-weight: 600; }
+.enviar:disabled { background: var(--acero); color: #8f9ba3; cursor: default; }
+.aviso { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: var(--listo); color: #fff; padding: 12px 18px; border-radius: 10px; font-weight: 500; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .aviso { animation: sube 0.2s ease-out; }
+  @keyframes sube { from { opacity: 0; transform: translate(-50%, 8px); } }
+}
+
+/* --- Esquema BD: mesas, login, sesión --- */
+.mesas { grid-template-columns: repeat(3, 1fr); }
+.mesas button { display: grid; place-items: center; gap: 2px; padding: 8px 4px; font-size: 1rem; }
+.mesas button b { font-size: 1.4rem; font-family: "Barlow Condensed", sans-serif; }
+.mesas button small { font-size: 0.75rem; color: #5d6a73; font-weight: 500; }
+.mesas button.sel small { color: #cfd6da; }
+.mesas button.ocupada { border-color: var(--ambar); box-shadow: inset 0 0 0 1.5px var(--ambar); }
+.leyenda { margin: 8px 0 0; font-size: 0.85rem; color: #5d6a73; }
+.nombre small { display: block; color: #5d6a73; font-weight: 400; font-size: 0.85rem; }
+.sesion { display: flex; align-items: center; gap: 10px; }
+.sesion span { color: #aab4bb; }
+.nav button { background: none; border: 1.5px solid #4a565e; color: #fff; padding: 6px 12px; border-radius: 8px; font-weight: 500; }
+.error { color: var(--tarde); font-weight: 500; }
+.error button { margin-left: 8px; padding: 6px 12px; border-radius: 8px; border: 1.5px solid var(--tarde); background: none; color: var(--tarde); }
+.login { max-width: 360px; margin: 0 auto; padding: 40px 16px; }
+.login form { display: grid; gap: 12px; }
+.login input { padding: 14px; border-radius: 10px; border: 1.5px solid var(--linea); background: var(--papel); font: inherit; }
+.login .enviar { max-width: none; }
+.liberar { margin-top: 10px; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1.5px solid var(--carbon); background: var(--papel); font-weight: 600; }
