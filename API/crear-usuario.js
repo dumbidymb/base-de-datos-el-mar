@@ -11,6 +11,10 @@ if (!usuario || !contrasena || !nombre) {
 
 const db = await mysql.createConnection({
   host: process.env.DB_HOST || "localhost",
+  port: Number(process.env.DB_PORT || 3306),
+  ssl: process.env.DB_SSL
+    ? { rejectUnauthorized: process.env.DB_SSL !== "sin-verificar", ...(process.env.DB_SSL_CA && { ca: process.env.DB_SSL_CA.replace(/\\n/g, "\n") }) }
+    : undefined,
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_NAME || "elmar",

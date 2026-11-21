@@ -4,11 +4,22 @@ import cors from "cors";
 import mysql from "mysql2/promise";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import rutasAdmin from "./Admin.js";
-import rutasInventario, { descontarInsumos } from "./Inventario.js";
+import rutasAdmin from "./admin.js";
+import rutasInventario, { descontarInsumos } from "./inventario.js";
 import rutasReportes from "./reportes.js";
 
-const { DB_HOST = "localhost", DB_USER = "root", DB_PASSWORD = "", DB_NAME = "elmar", PORT = 3000, JWT_SECRET } = process.env;
+const {
+  DB_HOST = "localhost",
+  DB_PORT = 3306,
+  DB_USER = "root",
+  DB_PASSWORD = "",
+  DB_NAME = "elmar",
+  DB_SSL, // en la nube casi siempre: DB_SSL=true
+  DB_SSL_CA, // certificado del proveedor (solo si lo pide)
+  ORIGENES, // direcciones de las apps permitidas, separadas por coma
+  PORT = 3000,
+  JWT_SECRET,
+} = process.env;
 if (!JWT_SECRET) {
   console.error("Falta JWT_SECRET en el archivo .env (copia .env.example a .env y llénalo).");
   process.exit(1);
@@ -16,6 +27,10 @@ if (!JWT_SECRET) {
 
 const db = mysql.createPool({
   host: DB_HOST,
+  port: Number(DB_PORT),
+  ssl: DB_SSL
+  ? { rejectUnauthorized: DB_SSL !== "sin-verificar", ...(DB_SSL_CA && { ca: DB_SSL_CA.replace(/\\n/g, "\n") }) }
+  : undefined,
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
@@ -33,7 +48,10 @@ try {
 }
 
 const app = express();
-app.use(cors());
+// En producción, solo las apps de mesero, cocina y administrador pueden usar la API
+const origenes = (ORIGENES || "").split(",").map((o) => o.trim().replace(/\/$/, "")).filter(Boolean);
+app.use(cors(origenes.length ? { origin: origenes } : undefined));
+app.get("/salud", (_req, res) => res.json({ ok: true })); // para que el hosting compruebe que la API vive
 app.use(express.json());
 
 /* ---------- Sesión y permisos ---------- */
